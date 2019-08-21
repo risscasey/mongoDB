@@ -17,19 +17,37 @@ app.get('/products', function(req, res){
     res.send(allProducts);
 });
 
-app.get('/id=:idNo', function(req, res){
-  const idNoParam = req.params.idNo;
-  console.log(idNoParam);
+app.get('/products/id=:idNo', function(req, res){
+  const IDParam = req.params.idNo;
+      let filteredData = [];
+      for (var i = 0; i < allProducts.length; i++) {
+          if(allProducts[i].id.toString() === IDParam){
+              filteredData.push(allProducts[i]);
+          }
+      }
+      res.send(filteredData);
+});
 
-  // let requestedID = [];
-  // for (var i = 0; i < allProducts.length; i++) {
-  //   if (idNoParam == allProducts[i].id) {
-  //     requestedID.push(allProducts[i]);
-  //   } else {
-  //     console.log('Sorry that was not a valid ID');
-  //   }
-  // }
-  // res.send(requestedID);
+app.get('/products/edit/id=:idNo', function(req, res){
+  const IDParam = req.params.idNo;
+      let filteredData = [];
+      for (var i = 0; i < allProducts.length; i++) {
+          if(allProducts[i].id.toString() === IDParam){
+              filteredData.push(allProducts[i]);
+          }
+      }
+      res.send(filteredData);
+});
+
+app.get('/products/delete/id=:idNo', function(req, res){
+  const IDParam = req.params.idNo;
+      let filteredData = [];
+      for (var i = 0; i < allProducts.length; i++) {
+          if(allProducts[i].id.toString() === IDParam){
+              filteredData.push(allProducts[i]);
+          }
+      }
+      res.send(filteredData);
 });
 
 app.listen(port, () => {
