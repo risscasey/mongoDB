@@ -7,6 +7,8 @@ const mongoose = require('mongoose');
 
 const config = require('./config.json');
 
+const Product = require('./models/products');
+
 mongoose.connect(`mongodb+srv://RissCasey:${config.MONGO_PASSWORD}@firstcluster-89ezs.mongodb.net/shop?retryWrites=true&w=majority`, {useNewUrlParser: true});
 
 const db = mongoose.connection;
@@ -31,18 +33,24 @@ app.get('/', function(req, res){
 });
 
 app.get('/products', function(req, res){
-    res.send(allProducts);
+    // res.send(allProducts);
+    Product.find().then(result => {
+      res.send(result);
+    })
 });
 
-app.get('/products/id=:idNo', function(req, res){
-  const IDParam = req.params.idNo;
-  let filteredData = [];
-  for (var i = 0; i < allProducts.length; i++) {
-    if(allProducts[i].id.toString() === IDParam){
-      filteredData.push(allProducts[i]);
-    }
-  }
-  res.send(filteredData);
+app.get('/products/:idNo', function(req, res){
+  const id = req.params.idNo;
+  Product.findById(id, function (err, product) {
+    res.send(product);
+  });
+  // let filteredData = [];
+  // for (var i = 0; i < allProducts.length; i++) {
+  //   if(allProducts[i].id.toString() === IDParam){
+  //     filteredData.push(allProducts[i]);
+  //   }
+  // }
+  // res.send(id);
 });
 
 app.get('/products/edit/id=:idNo', function(req, res){
@@ -67,7 +75,7 @@ app.get('/products/delete/id=:idNo', function(req, res){
   res.send(filteredData);
 });
 
-const Product = require('./models/products');
+
 
 app.post('/products', function(req, res){
   // console.log('post req made');
@@ -91,19 +99,18 @@ app.post('/products', function(req, res){
   }).catch(err => res.send(err));
 });
 
-app.post('/contact', function(req, res){
-  const user = new Product ({
-    _id: new mongoose.Types.ObjectId(),
-    fName: req.body.fName,
-    lName: req.body.lName,
-    email: req.body.email,
-  });
-  console.log(user);
-
-  user.save().then(result => {
-    res.send(result);
-  }).catch(err => res.send(err));
-});
+// app.post('/contact', function(req, res){
+//   console.log('post req made');
+//   console.log(req.body);
+//   let user = {
+//     _id: new mongoose.Types.ObjectId(),
+//     fName: req.body.fName,
+//     lName: req.body.lName,
+//     email: req.body.email,
+//     message: 'about to sent this to DB'
+//   }
+//   res.send(user);
+// });
 
 app.listen(port, () => {
     console.log(`application is running on port ${port}`)
