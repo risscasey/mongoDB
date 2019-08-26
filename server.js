@@ -53,7 +53,7 @@ app.get('/products/:idNo', function(req, res){
   // res.send(id);
 });
 
-app.get('/products/edit/id=:idNo', function(req, res){
+app.get('/products/edit/:idNo', function(req, res){
   const IDParam = req.params.idNo;
   let filteredData = [];
   for (var i = 0; i < allProducts.length; i++) {
@@ -64,7 +64,7 @@ app.get('/products/edit/id=:idNo', function(req, res){
   res.send(filteredData);
 });
 
-app.get('/products/delete/id=:idNo', function(req, res){
+app.get('/products/delete/:idNo', function(req, res){
   const IDParam = req.params.idNo;
   let filteredData = [];
   for (var i = 0; i < allProducts.length; i++) {
@@ -111,6 +111,17 @@ app.post('/products', function(req, res){
 //   }
 //   res.send(user);
 // });
+
+app.patch('/products/edit/:id', function(req, res){
+  const id = req.params.id;
+  const newProduct = {
+    name: req.body.name,
+    price: req.body.price
+  }
+  Product.updateOne({_id: id}, newProduct).then(result => {
+    res.send(result)
+  })
+})
 
 app.listen(port, () => {
     console.log(`application is running on port ${port}`)
