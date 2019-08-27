@@ -4,14 +4,11 @@ const port = 3000;
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-
 const config = require('./config.json');
-
 const Product = require('./models/products');
-
 mongoose.connect(`mongodb+srv://RissCasey:${config.MONGO_PASSWORD}@firstcluster-89ezs.mongodb.net/shop?retryWrites=true&w=majority`, {useNewUrlParser: true});
-
 const db = mongoose.connection;
+
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('we on mongoose boiz');
@@ -52,30 +49,6 @@ app.get('/products/:idNo', function(req, res){
   // }
   // res.send(id);
 });
-
-app.get('/products/edit/:idNo', function(req, res){
-  const IDParam = req.params.idNo;
-  let filteredData = [];
-  for (var i = 0; i < allProducts.length; i++) {
-    if(allProducts[i].id.toString() === IDParam){
-        filteredData.push(allProducts[i]);
-    }
-  }
-  res.send(filteredData);
-});
-
-app.get('/products/delete/:idNo', function(req, res){
-  const IDParam = req.params.idNo;
-  let filteredData = [];
-  for (var i = 0; i < allProducts.length; i++) {
-    if(allProducts[i].id.toString() === IDParam){
-        filteredData.push(allProducts[i]);
-    }
-  }
-  res.send(filteredData);
-});
-
-
 
 app.post('/products', function(req, res){
   // console.log('post req made');
@@ -122,6 +95,16 @@ app.patch('/products/edit/:id', function(req, res){
     res.send(result)
   })
 })
+
+app.delete('/products/:idNo', function(req, res){
+  console.log('herkjvdkvbde');
+  res.send('here2');
+  const id = req.params.idNo;
+  Product.deleteOne({ _id: id }).then(results => {
+    res.send(result)
+  }).catch(err => res.send(err));
+});
+
 
 app.listen(port, () => {
     console.log(`application is running on port ${port}`)
